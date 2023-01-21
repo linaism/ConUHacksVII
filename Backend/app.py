@@ -9,7 +9,8 @@ if __name__ == "__main__":
 
 
 # DB Connection String
-client = MongoClient('localhost', 27017)
+CONNECTION_STRING = "mongodb+srv://hackathon_user:hackathon_user@cluster0.9tm85nf.mongodb.net/test"
+client = MongoClient(CONNECTION_STRING)
 # DB definitiion
 db = client.Hackathon
 # DB Collections
