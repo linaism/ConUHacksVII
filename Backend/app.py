@@ -95,7 +95,7 @@ def get_top_10_symbols_by_cancelled(data_frames: list) -> dict:
 
 
 # use this function get_top_10_symbols_by_cancelled to get the top 10 symbols by cancelled Message type per second
-def get_top_10_symbols_by_cancelled_per_second(data_frames: list) -> list:
+def get_top_10_symbols_by_cancelled_per_second(data_frames: list) -> dict:
     # returns a list that contains a sublist of tuples (symbol, count) where each sublist is a second in the timestamp
     top10 = []
     for df in data_frames:
@@ -115,7 +115,7 @@ def get_top_10_symbols_by_cancelled_per_second(data_frames: list) -> list:
             symbols_count = sorted(symbol_count, key=lambda x: x[1], reverse=True)[:10]
             top10.append(symbols_count)
             current_time = next_time
-    return top10
+    return {"Top 10": top10}
 
 
 def get_top_10_symbols_by_trade_per_second(data_frames: list) -> dict:
@@ -164,6 +164,86 @@ def get_top_10_symbols_by_trade_success_per_one_second(data_frames: list) -> dic
     # top10 = sorted(top10, key=lambda x: x[1], reverse=True)
     return symbol_dict
 
+# takes a list of dataframes. Each dataframe is a stock exchange.
+# returns a list of the top 10 symbols by  "MessageType == Trade and total count" sorted from largest to smallest
+def get_top_10_symbols_by_trade_success(data_frames: list) -> list:
+    top10 = []
+    for df in data_frames:
+        filtered_df = df.query("MessageType == 'Trade'")
+        counts = filtered_df["Symbol"].value_counts()
+        for symbol, count in counts.items():
+            top10.append((symbol, count))
+    top10 = sorted(top10, key=lambda x: x[1], reverse=True)
+    return top10[:10]
+
+
+def get_top_10_symbols_by_trade_per_second(data_frames: list) -> list:
+    # returns a list that contains a sublist of tuples (symbol, count) where each sublist is a second in the timestamp
+    top10 = []
+    for df in data_frames:
+        df["TimeStamps"] = pd.to_datetime(df["TimeStamp"])
+        start_time = df["TimeStamps"].min()
+        end_time = df["TimeStamps"].max()
+        current_time = start_time
+        while current_time < end_time:
+            next_time = current_time + datetime.timedelta(seconds=1)
+            filtered_df = df.query(
+                "MessageType == 'Trade' and TimeStamp >= @current_time and TimeStamp < @next_time"
+            )
+            counts = filtered_df["Symbol"].value_counts()
+            symbol_count = []
+            for symbol, count in counts.items():
+                symbol_count.append((symbol, count))
+            symbols_count = sorted(symbol_count, key=lambda x: x[1], reverse=True)[:10]
+            top10.append(symbols_count)
+            current_time = next_time
+    return top10
+
+def get_total_trades_over_time(data_frames: list) -> list:
+    # each index in the list is a second in the timestamp starting from 0. The value at each index is the total trades for that second and the ones before it
+    trades_over_time = []
+    sum_trades = 0
+    for data_frame in data_frames:
+        data_frame["TimeStamps"] = pd.to_datetime(data_frame["TimeStamp"])
+        start_time = data_frame["TimeStamps"].min()
+        end_time = data_frame["TimeStamps"].max()
+        curr_time = start_time
+        counter = 0
+        while curr_time < end_time:
+            next_time = curr_time + datetime.timedelta(seconds=1)
+            filtered_df = data_frame.query(
+                "MessageType == 'Trade' and TimeStamp >= @curr_time and TimeStamp < @next_time"
+            )
+            sum_trades += len(filtered_df)
+            trades_over_time.append(sum_trades)
+            curr_time = next_time
+            counter = counter + 1
+            if counter >= 240:
+                break
+    return trades_over_time
+
+def get_total_cancelled_over_time(data_frames: list) -> list:
+    # each index in the list is a second in the timestamp starting from 0. The value at each index is the total trades for that second and the ones before it
+    trades_over_time = []
+    sum_trades = 0
+    for data_frame in data_frames:
+        data_frame["TimeStamps"] = pd.to_datetime(data_frame["TimeStamp"])
+        start_time = data_frame["TimeStamps"].min()
+        end_time = data_frame["TimeStamps"].max()
+        curr_time = start_time
+        counter = 0
+        while curr_time < end_time:
+            next_time = curr_time + datetime.timedelta(seconds=1)
+            filtered_df = data_frame.query(
+                "MessageType == 'Cancelled' and TimeStamp >= @curr_time and TimeStamp < @next_time"
+            )
+            sum_trades += len(filtered_df)
+            trades_over_time.append(sum_trades)
+            curr_time = next_time
+            counter = counter + 1
+            if counter >= 240:
+                break
+    return trades_over_time
 
 # Routes
 
@@ -175,6 +255,36 @@ def sample():
     res.headers.add("Access-Control-Allow-Origin", "*")
     return res
 
+# top 10 symbols by trade success
+@app.route("/api/toptensymbolscancelled")
+def TopTenSymbolsCancelled():
+    TSX_df = read_json_file(json_data_tsx)
+    Aequitas_df = read_json_file(json_data_aequitas)
+    Alpha_df = read_json_file(json_data_alpha)
+    result = get_top_10_symbols_by_cancelled([TSX_df, Aequitas_df, Alpha_df])
+    res = make_response(result)
+    res.headers.add("Access-Control-Allow-Origin", "*")
+    return res
+
+@app.route("/api/toptensymbolscancelledpersecond")
+def TopTenSymbolsCancelledPerSecond():
+    TSX_df = read_json_file(json_data_tsx)
+    Aequitas_df = read_json_file(json_data_aequitas)
+    Alpha_df = read_json_file(json_data_alpha)
+    result = get_top_10_symbols_by_cancelled_per_second([TSX_df, Aequitas_df, Alpha_df])
+    res = make_response(result)
+    res.headers.add("Access-Control-Allow-Origin", "*")
+    return res
+
+@app.route("/api/totaltraded")
+def getTotalTraded():
+    TSX_df = read_json_file(json_data_tsx)
+    Aequitas_df = read_json_file(json_data_aequitas)
+    Alpha_df = read_json_file(json_data_alpha)
+    result = get_total_trades_over_time([TSX_df, Aequitas_df, Alpha_df])
+    res = make_response({"Total Trades": result})
+    res.headers.add("Access-Control-Allow-Origin", "*")
+    return res
 
 # route to return top 10 success per second from all collections
 @app.route("/api/top10")
@@ -196,6 +306,16 @@ def getTopTen():
     res.headers.add("Access-Control-Allow-Origin", "*")
     return res
 
+@app.route("/api/TotalCancelledOverTime")
+def TotalCancelledOverTime():
+    TSX_df = read_json_file(json_data_tsx)
+    Aequitas_df = read_json_file(json_data_aequitas)
+    Alpha_df = read_json_file(json_data_alpha)
+
+    result = get_total_cancelled_over_time([TSX_df, Aequitas_df, Alpha_df])
+    res = make_response({"Cancelled Over Time": result})
+    res.headers.add("Access-Control-Allow-Origin", "*")
+    return res
 
 # route to return top 10 success overall
 @app.route("/api/top10All")
