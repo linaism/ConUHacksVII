@@ -1,0 +1,40 @@
+.clockTime {
+    color: white;
+    font-size: 28px;
+    text-align: left;
+}
+
+.clockDate {
+    color: white; 
+    font-size: 14px;
+    text-align: left;
+}
+
+
+.marketClosed {
+    font-size: 28px;
+    text-align: left;
+    color: #E95F5F;
+}
+
+.marketOpen {
+    font-size: 28px;
+    text-align: left;
+    color: #5FE98E;
+}
+
+.marketTitle {
+    color: white; 
+    font-size: 14px;
+    text-align: left;
+}
+
+.col {
+    display: flex;
+    border: none;
+}
+
+.row {
+    flex: 1;
+    flex-direction: column;
+}

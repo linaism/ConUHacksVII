@@ -3,7 +3,9 @@ import './Statistics.css'
 
 function Statistics() {
   return (
-    <div className="stats">STATISTICS</div>
+    <div className="stats">
+        <div className='statsTitle'>STATISTICS</div>
+    </div>
   )
 }
 

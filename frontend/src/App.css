@@ -11,6 +11,8 @@
 }
 
 .statistics {
+  right: 0;
+  max-width: 20%;
   padding: 20px 10px;
   background-color: #1c103483;
   width: 20%;
