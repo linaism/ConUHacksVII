@@ -4,13 +4,14 @@ import BarGraph from './BarGraph';
 import axios from "axios";
 
 let UserData = [[]];
+let CancelData = [[]];
 // route to return top 10 success per second from all collections
 const getTopTen = async()=> {
     await axios
       .get("http://127.0.0.1:5000/api/top10")
       .then((response) => {
         //console.log("test");
-        console.log(response.data["symbols by time"]);
+        console.log(response.data);
         //return response.data["symbols by time"];
         UserData = response.data["symbols by time"]
       })
@@ -19,10 +20,22 @@ const getTopTen = async()=> {
         console.log(error);
       });
   }
-  
+  const getTopTenCancel = async()=> {
+    await axios
+      .get("http://127.0.0.1:5000/api/top10")
+      .then((response) => {
+        //console.log("test");
+        console.log(response.data);
+        //return response.data["symbols by time"];
+        CancelData = response.data["symbols by time"]
+      })
+      .catch((error) => {
+        CancelData=[[]];
+        console.log(error);
+      });
+  }
 
 function Clock() {
-    const [start, setStart] = useState(false);
     const [time, setTime] = useState("9:28:00");
     const [counter, setCounter] = useState(0);
 
@@ -51,7 +64,7 @@ function Clock() {
             setCounter(prevCounter => {
                     
                     const input = UserData[prevCounter];
-                    const cancelInput = UserData[prevCounter];
+                    const cancelInput = CancelData[prevCounter];
 
                     const newData = {
                         labels: [],
@@ -131,7 +144,7 @@ function Clock() {
         }]
       });
     const input = UserData[0];
-    const cancelInput = UserData[0];
+    const cancelInput = CancelData[0];
 
     const newTransactionData = {
         labels: [],
@@ -173,6 +186,7 @@ function Clock() {
 
     useEffect(() => {
         getTopTen();
+        getTopTenCancel();
         
         
     }, []);
