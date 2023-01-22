@@ -3,6 +3,30 @@
   font-family: 'Open Sans', sans-serif;
 }
 
+.transactionGraphs {
+  padding: 20px 10px;
+  margin-left: 30px;
+  margin-right: 10px;
+  background-color: #1c103483;
+}
+
+.statistics {
+  padding: 20px 10px;
+  background-color: #1c103483;
+  width: 20%;
+}
+
+.rowC {
+  display: flex;
+  margin-right: 0;
+}
+
+.col {
+  flex: 1; 
+  padding: 1em;
+  border: solid;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

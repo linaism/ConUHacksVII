@@ -6,6 +6,7 @@ import { Clock } from "./Components/Clock";
 
 import axios from "axios";
 import Header from "./Components/Header";
+import Statistics from "./Components/Statistics";
 
 function test() {
   axios
@@ -47,10 +48,16 @@ function App() {
     <div className="App">
       <Header />
       <div className="rowC">
-        <Clock />
-        <div>
+        <div className="col transactionGraphs">
+          <Clock />
           <BarGraph chartData={chartData} />
         </div>
+        <div className="col statistics">
+          <Statistics />
+        </div>
+      </div>
+      <div className="anomalies">
+        
       </div>
     </div>
   );
