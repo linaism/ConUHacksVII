@@ -109,11 +109,66 @@ def get_top_10_symbols_by_trade_per_second(data_frames: list) -> list:
     return top10
 
 
+def get_total_trades_over_time(data_frames: list) -> list:
+    # each index in the list is a second in the timestamp starting from 0. The value at each index is the total trades for that second and the ones before it
+    trades_over_time = []
+    sum_trades = 0
+    for data_frame in data_frames:
+        data_frame["TimeStamps"] = pd.to_datetime(data_frame["TimeStamp"])
+        start_time = data_frame["TimeStamps"].min()
+        end_time = data_frame["TimeStamps"].max()
+        curr_time = start_time
+        counter = 0
+        while curr_time < end_time:
+            next_time = curr_time + datetime.timedelta(seconds=1)
+            filtered_df = data_frame.query(
+                "MessageType == 'Trade' and TimeStamp >= @curr_time and TimeStamp < @next_time"
+            )
+            sum_trades += len(filtered_df)
+            trades_over_time.append(sum_trades)
+            curr_time = next_time
+            counter = counter + 1
+            if counter >= 240:
+                break
+    return trades_over_time
+
+
+def get_total_cancelled_over_time(data_frames: list) -> list:
+    # each index in the list is a second in the timestamp starting from 0. The value at each index is the total trades for that second and the ones before it
+    trades_over_time = []
+    sum_trades = 0
+    for data_frame in data_frames:
+        data_frame["TimeStamps"] = pd.to_datetime(data_frame["TimeStamp"])
+        start_time = data_frame["TimeStamps"].min()
+        end_time = data_frame["TimeStamps"].max()
+        curr_time = start_time
+        counter = 0
+        while curr_time < end_time:
+            next_time = curr_time + datetime.timedelta(seconds=1)
+            filtered_df = data_frame.query(
+                "MessageType == 'Cancelled' and TimeStamp >= @curr_time and TimeStamp < @next_time"
+            )
+            sum_trades += len(filtered_df)
+            trades_over_time.append(sum_trades)
+            curr_time = next_time
+            counter = counter + 1
+            if counter >= 240:
+                break
+    return trades_over_time
+
+
 TSX_df = read_json_file(file_TSX)
 Aequitas_df = read_json_file(file_AQD)
 Alpha_df = read_json_file(file_ALPHD)
-top10 = get_top_10_symbols_by_cancelled_per_second([Aequitas_df])
-print(top10)
+combined_df = pd.concat([TSX_df, Aequitas_df, Alpha_df])
+
+
+# top10 = get_top_10_symbols_by_cancelled_per_second([Aequitas_df])
+# print(top10)
+
+# tot_trades = get_total_cancelled_over_time([combined_df])
+# print(tot_trades)
+# print(len(tot_trades))
 
 # top10new = get_top_10_symbols_by_trade_success_per_one_second(
 #     [TSX_df, Aequitas_df, Alpha_df]

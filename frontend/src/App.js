@@ -6,6 +6,7 @@ import { Clock } from "./Components/Clock";
 
 import axios from "axios";
 import Header from "./Components/Header";
+import Statistics from "./Components/Statistics";
 
 function test() {
   axios
@@ -43,13 +44,22 @@ function getTopTenOverall() {
 }
 
 function App() {
-  
+  const [userData, setUserData] = useState(UserData);
 
   return (
     <div className="App">
-      <Clock/>
-      <div style={{width: 1000}}>
-        
+      <Header />
+      <div className="rowC">
+        <div className="col transactionGraphs">
+          <Clock />
+          {/* <BarGraph chartData={chartData} /> */}
+        </div>
+        <div className="col statistics">
+          <Statistics />
+        </div>
+      </div>
+      <div className="anomalies">
+
       </div>
         <button onClick={getTopTenOverall}>TopTenOverall</button>
         <button onClick={getTopTen}>TopTen</button>
