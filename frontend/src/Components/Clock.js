@@ -51,20 +51,6 @@ const getTopTenCancelledPerSecond = async () => {
     });
 };
 
-const getTotalTraded = async () => {
-  await axios
-    .get("http://127.0.0.1:5000/api/totaltraded")
-    .then((response) => {
-      //console.log("test");
-      console.log(response.data);
-      //return response.data["symbols by time"];
-      CancelData = response.data;
-    })
-    .catch((error) => {
-      CancelData = [[]];
-      console.log(error);
-    });
-};
 
 function Clock({counter, setCounter}) {
     const [time, setTime] = useState("9:28:00");
