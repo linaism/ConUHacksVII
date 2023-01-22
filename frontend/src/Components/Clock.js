@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import BarGraph from './BarGraph';
 import { UserData } from '../Data'
+import './Clock.css'
 
 
 
@@ -142,7 +143,6 @@ function Clock() {
 
                     setTransactionData(newData);
                     setCancellationData(newCancellationData);
-                //}
                 if(prevCounter < 240) {
                     return prevCounter + 1;
                 }
@@ -153,11 +153,28 @@ function Clock() {
     }, []);
 
     return (
-        <div>
-            <div>{time}</div>
-            <div>Counter: {counter}</div>
+        <div className='parent'>
+            <div className='col'>
+                <div className='row'>
+                    <div className="clockDate"> 06/01/2023</div>
+                    <div className="clockTime">{time}</div>
+                </div>
+                <div className='row'>
+                    <div className="marketTitle"> Market Status </div>
+                    
+                    <div className="marketStatus"> 
+                    {counter < 120 ? (
+                        <div className='marketClosed'> Closed </div>
+                    ) : (
+                        <div className='marketOpen'> Open </div>
+                    )}
+                    </div>
+                </div>
+            </div>
+            <div className='graphz'>
             <BarGraph chartData={transactionData} />
             <BarGraph chartData={cancellationData} />
+            </div>
         </div>
         
     );

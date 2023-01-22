@@ -1,0 +1,9 @@
+.stats {
+    padding: 10px 5px;
+    color: rgba(255, 255, 255, 0.743);
+    text-align: left;
+}
+
+.statsTitle {
+    font-size: 20px;
+}
