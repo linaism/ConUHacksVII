@@ -4,6 +4,22 @@ import { Chart as ChartJS } from "chart.js/auto";
 
 export const options = {
   indexAxis: 'y',
+  scales: {
+    y: {
+      ticks: {color: 'white'}
+    }, 
+    x: {
+      ticks: {color: 'white'}
+    }
+  }, 
+  plugins: {
+    legend: {
+      align: 'end', 
+      labels: {
+        color: 'white'
+      }
+    }
+  }
 };
 
 function BarGraph({chartData}) {
