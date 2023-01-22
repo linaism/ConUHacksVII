@@ -231,15 +231,15 @@ def getTopTenSuccessSeconds(collection):
 @app.route("/api/alldata/<collection>")
 def getall(collection):
     # default to aequitas
-    df = read_json_file(json_data_aequitas)
+    df = json_data_aequitas
     if(collection == "aequitas"):
-        df = read_json_file(json_data_aequitas)
+        df = json_data_aequitas
     if(collection == "tsx"):
-        df = read_json_file(json_data_tsx)
+        df = json_data_tsx
     if(collection == "alpha"):
-        df = read_json_file(json_data_alpha)
-    df_dict = {collection: df}
-    res = make_response(df_dict)
+        df = json_data_alpha
+
+    res = make_response(df)
     res.headers.add("Access-Control-Allow-Origin", "*")
     return res
 

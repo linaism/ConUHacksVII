@@ -35,9 +35,11 @@ function getTopTenOverall(){
   });
 }
 
-//  route to return top 10 success per second from certain collection
-function getTopTenSuccessCertainCollection(){
-  axios.get('http://127.0.0.1:5000/api/TopTenSuccessSeconds/<collection>')
+// all data from any collection
+function getAllSpecificCollection(collection){
+  axios.get('http://127.0.0.1:5000/api/alldata/$collection', {
+    params: { Collection: collection }
+  })
   .then(response => {
     console.log(response.data);
   })
@@ -46,9 +48,11 @@ function getTopTenSuccessCertainCollection(){
   });
 }
 
-// all data from any collection
-function getAllSpecificCollection(collection){
-  axios.get('http://127.0.0.1:5000/api/alldata/$collection')
+//  route to return top 10 success per second from certain collection
+function getTopTenSuccessCertainCollection(collection){
+  axios.get('http://127.0.0.1:5000/api/TopTenSuccessSeconds/$collection', {
+    params: { Collection: collection }
+  })
   .then(response => {
     console.log(response.data);
   })
@@ -72,8 +76,8 @@ function App() {
         <button onClick={test}>Press</button>
         <button onClick={getTopTenOverall}>TopTenOverall</button>
         <button onClick={getTopTen}>TopTen</button>
-        <button onClick={getAllSpecificCollection("Aequitas")}>AllSpecificCollection</button>
-        <button onClick={getTopTenSuccessCertainCollection("Aequitas")}>Top Ten Success Certain Collection</button>
+        <button onClick={getAllSpecificCollection("tsx")}>AllSpecificCollection</button>
+        <button onClick={getTopTenSuccessCertainCollection("tsx")}>Top Ten Success Certain Collection</button>
 
 
 
