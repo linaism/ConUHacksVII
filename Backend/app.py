@@ -1,6 +1,5 @@
 from pymongo import MongoClient
 from flask import Flask, jsonify, Response, make_response
-from bson.json_util import dumps
 import json
 import pandas as pd
 import datetime
@@ -16,7 +15,9 @@ file_TSX = "data/TSXData.json"
 filepath = "data/top10.json"
 
 # DB Connection String
-CONNECTION_STRING = "mongodb+srv://hackathon_user:hackathon_user@cluster0.9tm85nf.mongodb.net/test"
+CONNECTION_STRING = (
+    "mongodb+srv://hackathon_user:hackathon_user@cluster0.9tm85nf.mongodb.net/test"
+)
 client = MongoClient(CONNECTION_STRING)
 # DB definitiion
 db = client.Hackathon
@@ -35,9 +36,10 @@ list_cur_alpha = cursorAlpha
 list_cur_aequitas = cursorAequitas
 list_cur_tsx = cursorTSX
 
-json_data_alpha = dumps(list_cur_alpha, indent = 2) 
-json_data_aequitas = dumps(list_cur_aequitas, indent = 2)
-json_data_tsx = dumps(list_cur_tsx, indent = 2)
+json_data_alpha = json.dumps(list_cur_alpha, indent=2)
+json_data_aequitas = json.dumps(list_cur_aequitas, indent=2)
+json_data_tsx = json.dumps(list_cur_tsx, indent=2)
+
 
 def read_json_file(file_name: str) -> pd.DataFrame:
     df = pd.read_json(file_name)
@@ -70,7 +72,7 @@ def get_unique_messageTypes(data_frame: pd.DataFrame) -> list:
 
 # takes a list of dataframes. Each dataframe is a stock exchange.
 # returns a list of the top 10 symbols by  "MessageType == Trade and total count" sorted from largest to smallest
-def get_top_10_symbols_by_trade_success(data_frames: list) -> list:
+def get_top_10_symbols_by_trade_success(data_frames: list) -> dict:
     top10 = []
     for df in data_frames:
         filtered_df = df.query("MessageType == 'Trade'")
@@ -79,10 +81,11 @@ def get_top_10_symbols_by_trade_success(data_frames: list) -> list:
             top10.append((symbol, count))
     top10 = sorted(top10, key=lambda x: x[1], reverse=True)
     top10_toppest = top10[:10]
-    top10_dict = { "Top 10":  top10_toppest}
+    top10_dict = {"Top 10": top10_toppest}
     return top10_dict
 
-def get_top_10_symbols_by_cancelled(data_frames: list) -> list:
+
+def get_top_10_symbols_by_cancelled(data_frames: list) -> dict:
     top10 = []
     for df in data_frames:
         filtered_df = df.query("MessageType == 'Cancelled'")
@@ -90,7 +93,9 @@ def get_top_10_symbols_by_cancelled(data_frames: list) -> list:
         for symbol, count in counts.items():
             top10.append((symbol, count))
     top10 = sorted(top10, key=lambda x: x[1], reverse=True)
-    return top10[:10]
+    top10_toppest = top10[:10]
+    top10_dict = {"Top 10": top10_toppest}
+    return top10_dict
 
 
 # use this function get_top_10_symbols_by_cancelled to get the top 10 symbols by cancelled Message type per second
@@ -117,7 +122,7 @@ def get_top_10_symbols_by_cancelled_per_second(data_frames: list) -> list:
     return top10
 
 
-def get_top_10_symbols_by_trade_per_second(data_frames: list) -> list:
+def get_top_10_symbols_by_trade_per_second(data_frames: list) -> dict:
     # returns a list that contains a sublist of tuples (symbol, count) where each sublist is a second in the timestamp
     top10 = []
     for df in data_frames:
@@ -137,9 +142,11 @@ def get_top_10_symbols_by_trade_per_second(data_frames: list) -> list:
             symbols_count = sorted(symbol_count, key=lambda x: x[1], reverse=True)[:10]
             top10.append(symbols_count)
             current_time = next_time
-    return top10
+    symbol_dict = {"Top 10": top10}
+    return symbol_dict
 
-def get_top_10_symbols_by_trade_success_per_one_second(data_frames: list) -> list:
+
+def get_top_10_symbols_by_trade_success_per_one_second(data_frames: list) -> dict:
     top10 = []
     for df in data_frames:
         df["TimeStamps"] = pd.to_datetime(df["TimeStamp"])
@@ -159,23 +166,19 @@ def get_top_10_symbols_by_trade_success_per_one_second(data_frames: list) -> lis
     symbol_dict = {"symbols by time": top10}
     # sort by count
     # top10 = sorted(top10, key=lambda x: x[1], reverse=True)
-    return symbol_dict;
-
-
+    return symbol_dict
 
 
 # Routes
 
-@app.route('/sample')
+
+@app.route("/sample")
 def sample():
-    data = {
-        "name": "John Smith",
-        "age": 30,
-        "city": "New York"
-    }
-    res = make_response(dumps(data))
+    data = {"name": "John Smith", "age": 30, "city": "New York"}
+    res = make_response(json.dumps(data))
     res.headers.add("Access-Control-Allow-Origin", "*")
     return res
+
 
 # route to return top 10 success per second from all collections
 @app.route("/api/top10")
@@ -197,13 +200,14 @@ def getTopTen():
     res.headers.add("Access-Control-Allow-Origin", "*")
     return res
 
-#route to return top 10 success overall
+
+# route to return top 10 success overall
 @app.route("/api/top10All")
 def getTopAll():
     TSX_df = read_json_file(json_data_tsx)
     Aequitas_df = read_json_file(json_data_aequitas)
     Alpha_df = read_json_file(json_data_alpha)
-    
+
     top10 = get_top_10_symbols_by_trade_success([TSX_df, Aequitas_df, Alpha_df])
     res = make_response(top10)
     res.headers.add("Access-Control-Allow-Origin", "*")
@@ -214,19 +218,18 @@ def getTopAll():
 @app.route("/api/TopTenSuccessSeconds/<collection>")
 def getTopTenSuccessSeconds(collection):
     df = ""
-    if(collection == "aequitas"):
+    if collection == "aequitas":
         df = read_json_file(json_data_aequitas)
-    if(collection == "tsx"):
+    if collection == "tsx":
         df = read_json_file(json_data_tsx)
-    if(collection == "alpha"):
+    if collection == "alpha":
         df = read_json_file(json_data_alpha)
-    top10new = get_top_10_symbols_by_trade_success_per_one_second(
-        [df]
-    )
+    top10new = get_top_10_symbols_by_trade_success_per_one_second([df])
     res = make_response(top10new)
     res.headers.add("Access-Control-Allow-Origin", "*")
     return res
-    
+
+
 # all data from any collection
 @app.route("/api/alldata/<collection>")
 def getall(collection):
@@ -242,6 +245,7 @@ def getall(collection):
     res = make_response(df)
     res.headers.add("Access-Control-Allow-Origin", "*")
     return res
+
 
 @app.route("/")
 def root():
