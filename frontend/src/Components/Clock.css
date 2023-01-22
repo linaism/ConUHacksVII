@@ -29,12 +29,14 @@
     text-align: left;
 }
 
-.col {
-    display: flex;
+.row {
+    text-align: left;
+    display: inline-block;
+    margin-right: 20%;
     border: none;
 }
 
-.row {
-    flex: 1;
-    flex-direction: column;
+
+.col {
+    text-align: left;
 }

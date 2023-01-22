@@ -154,7 +154,7 @@ function Clock() {
     }, []);
 
     return (
-        <div>
+        <div className='parent'>
             <div className='col'>
                 <div className='row'>
                     <div className="clockDate"> 06/01/2023</div>
@@ -172,8 +172,10 @@ function Clock() {
                     </div>
                 </div>
             </div>
+            <div className='graphz'>
             <BarGraph chartData={transactionData} />
             <BarGraph chartData={cancellationData} />
+            </div>
         </div>
         
     );

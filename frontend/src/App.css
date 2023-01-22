@@ -26,7 +26,6 @@
 .col {
   flex: 1; 
   padding: 1em;
-  border: solid;
 }
 
 @keyframes App-logo-spin {
