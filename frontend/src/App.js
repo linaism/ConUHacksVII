@@ -19,30 +19,33 @@ function test() {
     });
 }
 
+
+// route to return top 10 success per second from all collections
+function getTopTen() {
+  axios
+    .get("http://127.0.0.1:5000/api/top10")
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+// route to return top 10 success overall
+function getTopTenOverall() {
+  axios
+    .get("http://127.0.0.1:5000/api/top10All")
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 function App() {
   const [userData, setUserData] = useState(UserData);
-  const sortedData = userData.sort((a, b) => b.gain - a.gain);
-  const chartData = {
-    labels: sortedData.map((data) => data.year),
-    datasets: [
-      {
-        label: "Users Gained",
-        data: sortedData.map((data) => data.gain),
-        backgroundColor: [
-          "#765dd9",
-          "#866ee6",
-          "#8f78eb",
-          "#9d88f2",
-          "#a590f5",
-          "#b29ffc",
-          "#bcabff",
-          "#c8baff",
-          "#d4c9ff",
-          "#dad2fc",
-        ],
-      },
-    ],
-  };
 
   return (
     <div className="App">
@@ -50,15 +53,19 @@ function App() {
       <div className="rowC">
         <div className="col transactionGraphs">
           <Clock />
-          <BarGraph chartData={chartData} />
+          {/* <BarGraph chartData={chartData} /> */}
         </div>
         <div className="col statistics">
           <Statistics />
         </div>
       </div>
       <div className="anomalies">
-        
+
       </div>
+        <button onClick={getTopTenOverall}>TopTenOverall</button>
+        <button onClick={getTopTen}>TopTen</button>
+
+
     </div>
   );
 }
