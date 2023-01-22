@@ -37,9 +37,9 @@ const getTopTen = async()=> {
       });
   }
 
-function Clock() {
+function Clock({counter, setCounter}) {
     const [time, setTime] = useState("9:28:00");
-    const [counter, setCounter] = useState(0);
+    
 
     function play() {
         setTransactionData(newTransactionData);

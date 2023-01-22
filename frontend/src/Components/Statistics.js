@@ -1,7 +1,7 @@
 import React from 'react'
 import './Statistics.css'
 
-function Statistics() {
+function Statistics({counter, setCounter}) {
   return (
     <div className="stats">
         <div className='statsTitle'>STATISTICS</div>

@@ -45,17 +45,20 @@ function getTopTenOverall() {
 
 function App() {
   const [userData, setUserData] = useState(UserData);
+  const [counter, setCounter] = useState(0);
 
   return (
     <div className="App">
       <Header />
       <div className="rowC">
         <div className="col transactionGraphs">
-          <Clock />
+          <Clock counter = {counter}
+          setCounter={setCounter}/>
           {/* <BarGraph chartData={chartData} /> */}
         </div>
         <div className="col statistics">
-          <Statistics />
+          <Statistics counter = {counter}
+          setCounter={setCounter}/>
         </div>
       </div>
       <div className="anomalies">
