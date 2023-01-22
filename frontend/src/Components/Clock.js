@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import BarGraph from "./BarGraph";
-//import { UserData } from '../Data'
 import axios from "axios";
 import "./Clock.css";
+import playLogo from '../Assets/play-button.png'
 
 let UserData = [[]];
 let CancelData = [[]];
@@ -245,19 +245,23 @@ function Clock({counter, setCounter}) {
     return (
         <div className='parent'>
             <div className='col'>
-                <div className='row'>
-                    <div className="clockDate"> 06/01/2023</div>
-                    <div className="clockTime">{time}</div>
+                <div className='playB row'>
+                    <img className="buttonClass" onClick={play} src={playLogo} alt="Play" />
                 </div>
-                <div className='row'>
-                    <div className="marketTitle"> Market Status </div>
-                    
-                    <div className="marketStatus"> 
-                    {counter < 120 ? (
-                        <div className='marketClosed'> Closed </div>
-                    ) : (
-                        <div className='marketOpen'> Open </div>
-                    )}
+                <div className="combo row">
+                    <div className='info row'>
+                        <div className="clockDate"> 06/01/2023</div>
+                        <div className="clockTime">{time}</div>
+                    </div>
+                    <div className='row'>
+                        <div className="marketTitle"> Market Status </div>
+                        <div className="marketStatus"> 
+                        {counter < 120 ? (
+                            <div className='marketClosed'> Closed </div>
+                        ) : (
+                            <div className='marketOpen'> Open </div>
+                        )}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -267,7 +271,6 @@ function Clock({counter, setCounter}) {
                 <div className='TRCancelledTitle'>Transactions Cancelled</div>
                 <BarGraph chartData={cancellationData} />
             </div>
-            <button className="buttonClass" onClick={play}>play</button>
         </div>
   );
 }

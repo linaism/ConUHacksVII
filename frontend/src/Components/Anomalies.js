@@ -32,8 +32,8 @@ function Anomalies() {
     return (
       <table className='table'>
         <tr> 
-            <th></th>
-            <th></th>
+            <th className="tableheader">Symbol</th>
+            <th className="tableheader">Exchange</th>
             <th className="tableheader"> New Order Request </th>
             <th className="tableheader"> New Order Ack </th> 
             <th className="tableheader"> Trade </th> 
@@ -47,7 +47,7 @@ function Anomalies() {
 
   return (
     <div className='container' style={{ margin: '50px' }}>
-      <h1>Transaction Table</h1>
+      <h1 className='titleTransac'>Transaction Table</h1>
       {renderTable()}
     </div>
   );
