@@ -73,10 +73,7 @@ function Clock() {
                         datasets: [{
                             label: 'Transactions Completed',
                             backgroundColor: ["#765dd9", "#866ee6", "#8f78eb", "#9d88f2", "#a590f5", "#b29ffc", "#bcabff", "#c8baff", "#d4c9ff", "#dad2fc"],
-                            borderColor: 'rgba(255,99,132,1)',
                             borderWidth: 1,
-                            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-                            hoverBorderColor: 'rgba(255,99,132,1)',
                             data: []
                         }]
                       }
@@ -92,10 +89,7 @@ function Clock() {
                         datasets: [{
                             label: 'Transactions Cancelled',
                             backgroundColor: ["#765dd9", "#866ee6", "#8f78eb", "#9d88f2", "#a590f5", "#b29ffc", "#bcabff", "#c8baff", "#d4c9ff", "#dad2fc"],
-                            borderColor: 'rgba(255,99,132,1)',
                             borderWidth: 1,
-                            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-                            hoverBorderColor: 'rgba(255,99,132,1)',
                             data: []
                         }]
                       }
@@ -123,10 +117,7 @@ function Clock() {
         datasets: [{
             label: 'Transactions Completed',
             backgroundColor: ["#765dd9", "#866ee6", "#8f78eb", "#9d88f2", "#a590f5", "#b29ffc", "#bcabff", "#c8baff", "#d4c9ff", "#dad2fc"],
-            borderColor: 'rgba(255,99,132,1)',
             borderWidth: 1,
-            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-            hoverBorderColor: 'rgba(255,99,132,1)',
             data: []
         }]
       });
@@ -137,10 +128,7 @@ function Clock() {
         datasets: [{
             label: 'Transactions Cancelled',
             backgroundColor: ["#765dd9", "#866ee6", "#8f78eb", "#9d88f2", "#a590f5", "#b29ffc", "#bcabff", "#c8baff", "#d4c9ff", "#dad2fc"],
-            borderColor: 'rgba(255,99,132,1)',
             borderWidth: 1,
-            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-            hoverBorderColor: 'rgba(255,99,132,1)',
             data: []
         }]
       });
@@ -152,10 +140,7 @@ function Clock() {
         datasets: [{
             label: 'Transactions Completed',
             backgroundColor: ["#765dd9", "#866ee6", "#8f78eb", "#9d88f2", "#a590f5", "#b29ffc", "#bcabff", "#c8baff", "#d4c9ff", "#dad2fc"],
-            borderColor: 'rgba(255,99,132,1)',
             borderWidth: 1,
-            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-            hoverBorderColor: 'rgba(255,99,132,1)',
             data: []
         }]
       }
@@ -171,10 +156,7 @@ function Clock() {
         datasets: [{
             label: 'Transactions Cancelled',
             backgroundColor: ["#765dd9", "#866ee6", "#8f78eb", "#9d88f2", "#a590f5", "#b29ffc", "#bcabff", "#c8baff", "#d4c9ff", "#dad2fc"],
-            borderColor: 'rgba(255,99,132,1)',
             borderWidth: 1,
-            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-            hoverBorderColor: 'rgba(255,99,132,1)',
             data: []
         }]
       }
@@ -212,8 +194,10 @@ function Clock() {
                 </div>
             </div>
             <div className='graphz'>
-            <BarGraph chartData={transactionData} />
-            <BarGraph chartData={cancellationData} />
+                <div className='TRProcessedTitle'>Transactions Processed</div>
+                <BarGraph chartData={transactionData} />
+                <div className='TRCancelledTitle'>Transactions Cancelled</div>
+                <BarGraph chartData={cancellationData} />
             </div>
             <button onClick={play}>play</button>
         </div>

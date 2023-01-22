@@ -16,9 +16,9 @@ function Anomalies() {
       return <tr className='tableRow' key={symbol} >
       <td className='box'>{symbol}</td>
       <td className='box'>{exchange}</td>
-      <td className='state' style={newOrderRequest == "oui" ? {backgroundColor:"#5FE98E"} : {backgroundColor:"#E95F5F"}}></td>
-      <td className='state' style={newOrderAck == "oui" ? {backgroundColor:"#5FE98E"} : {backgroundColor:"#E95F5F"}}></td>
-      <td className='state' style={trade == "oui" ? {backgroundColor:"#5FE98E"} : {backgroundColor:"#E95F5F"}}></td>
+      <td className='state' style={newOrderRequest == "oui" ? {} : {backgroundColor:"#E95F5F"}}></td>
+      <td className='state' style={newOrderAck == "oui" ? {} : {backgroundColor:"#E95F5F"}}></td>
+      <td className='state' style={trade == "oui" ? {} : {backgroundColor:"#E95F5F"}}></td>
       <td className='result'> {newOrderRequest == "non" || "newOrderAck" == "non" || "trade" == "non" ? (
                         <div className='faultyOp'> Faulty </div>
                     ) : (
@@ -32,11 +32,11 @@ function Anomalies() {
     return (
       <table className='table'>
         <tr> 
-            <th>Symbol</th>
-            <th> Exchange </th>
-            <th> New Order Request </th>
-            <th> New Order Ack </th> 
-            <th> Trade </th> 
+            <th></th>
+            <th></th>
+            <th className="tableheader"> New Order Request </th>
+            <th className="tableheader"> New Order Ack </th> 
+            <th className="tableheader"> Trade </th> 
         </tr>
         <tbody className='tableBody'>
           {renderRowData()}
