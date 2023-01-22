@@ -62,11 +62,8 @@ function Clock() {
                 return `${newHours}:${newMinutes}:${newSeconds}`;
             });
             setCounter(prevCounter => {
-                console.log(prevCounter/10);
-                if((prevCounter+1) %10 == 0){
                     
-                    const input = UserData[(prevCounter+1)/10];
-                    console.log(input);
+                    const input = UserData[prevCounter];
 
                     const newData = {
                         labels: [],
@@ -87,7 +84,7 @@ function Clock() {
                         newData.datasets[0].data.push(element[1]);
                     });
                     setTransactionData(newData);
-                }
+                //}
                 if(prevCounter < 240) {
                     return prevCounter + 1;
                 }
