@@ -20,7 +20,6 @@ function test() {
     });
 }
 
-
 // route to return top 10 success per second from all collections
 function getTopTen() {
   axios

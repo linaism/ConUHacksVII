@@ -1,82 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import BarGraph from './BarGraph';
-import { UserData } from '../Data'
+//import { UserData } from '../Data'
+import axios from "axios";
 import './Clock.css'
 
 
+let UserData = [[]];
+let CancelData = [[]];
+// route to return top 10 success per second from all collections
+const getTopTen = async()=> {
+    await axios
+      .get("http://127.0.0.1:5000/api/top10")
+      .then((response) => {
+        //console.log("test");
+        console.log(response.data);
+        //return response.data["symbols by time"];
+        UserData = response.data["symbols by time"]
+      })
+      .catch((error) => {
+        UserData=[[]];
+        console.log(error);
+      });
+  }
+  const getTopTenCancel = async()=> {
+    await axios
+      .get("http://127.0.0.1:5000/api/top10")
+      .then((response) => {
+        //console.log("test");
+        console.log(response.data);
+        //return response.data["symbols by time"];
+        CancelData = response.data["symbols by time"]
+      })
+      .catch((error) => {
+        CancelData=[[]];
+        console.log(error);
+      });
+  }
 
 function Clock() {
     const [time, setTime] = useState("9:28:00");
     const [counter, setCounter] = useState(0);
-    //FOR THE TRANSACTION BAR GRAPH
-    const [transactionData, setTransactionData] = useState({
-        labels: [],
-        datasets: [{
-            label: 'Transactions Completed',
-            backgroundColor: ["#765dd9", "#866ee6", "#8f78eb", "#9d88f2", "#a590f5", "#b29ffc", "#bcabff", "#c8baff", "#d4c9ff", "#dad2fc"],
-            borderColor: 'rgba(255,99,132,1)',
-            borderWidth: 1,
-            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-            hoverBorderColor: 'rgba(255,99,132,1)',
-            data: []
-        }]
-      });
 
-    //FOR THE TRANSITION BAR GRAPH
-    const [cancellationData, setCancellationData] = useState({
-        labels: [],
-        datasets: [{
-            label: 'Transactions Cancelled',
-            backgroundColor: ["#765dd9", "#866ee6", "#8f78eb", "#9d88f2", "#a590f5", "#b29ffc", "#bcabff", "#c8baff", "#d4c9ff", "#dad2fc"],
-            borderColor: 'rgba(255,99,132,1)',
-            borderWidth: 1,
-            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-            hoverBorderColor: 'rgba(255,99,132,1)',
-            data: []
-        }]
-      });
-    const input = UserData[0];
-    const cancelInput = UserData[0];
-
-    const newTransactionData = {
-        labels: [],
-        datasets: [{
-            label: 'Transactions Completed',
-            backgroundColor: ["#765dd9", "#866ee6", "#8f78eb", "#9d88f2", "#a590f5", "#b29ffc", "#bcabff", "#c8baff", "#d4c9ff", "#dad2fc"],
-            borderColor: 'rgba(255,99,132,1)',
-            borderWidth: 1,
-            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-            hoverBorderColor: 'rgba(255,99,132,1)',
-            data: []
-        }]
-      }
-    input.forEach(element => {
-        
-        newTransactionData.labels.push(element[0]);
-        newTransactionData.datasets[0].data.push(element[1]);
-        
-    });
-
-    const newCancellationData = {
-        labels: [],
-        datasets: [{
-            label: 'Transactions Cancelled',
-            backgroundColor: ["#765dd9", "#866ee6", "#8f78eb", "#9d88f2", "#a590f5", "#b29ffc", "#bcabff", "#c8baff", "#d4c9ff", "#dad2fc"],
-            borderColor: 'rgba(255,99,132,1)',
-            borderWidth: 1,
-            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-            hoverBorderColor: 'rgba(255,99,132,1)',
-            data: []
-        }]
-      }
-    cancelInput.forEach(element => {
-        
-        newCancellationData.labels.push(element[0]);
-        newCancellationData.datasets[0].data.push(element[1]);
-        
-    });
-
-    useEffect(() => {
+    function play() {
         setTransactionData(newTransactionData);
         setCancellationData(newCancellationData);
         const interval = setInterval(() => {
@@ -101,7 +66,7 @@ function Clock() {
             setCounter(prevCounter => {
                     
                     const input = UserData[prevCounter];
-                    const cancelInput = UserData[prevCounter];
+                    const cancelInput = CancelData[prevCounter];
 
                     const newData = {
                         labels: [],
@@ -150,6 +115,81 @@ function Clock() {
             });
         }, 1000);
         return () => clearInterval(interval);
+      }
+
+    //FOR THE TRANSACTION BAR GRAPH
+    const [transactionData, setTransactionData] = useState({
+        labels: [],
+        datasets: [{
+            label: 'Transactions Completed',
+            backgroundColor: ["#765dd9", "#866ee6", "#8f78eb", "#9d88f2", "#a590f5", "#b29ffc", "#bcabff", "#c8baff", "#d4c9ff", "#dad2fc"],
+            borderColor: 'rgba(255,99,132,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+            hoverBorderColor: 'rgba(255,99,132,1)',
+            data: []
+        }]
+      });
+
+    //FOR THE TRANSITION BAR GRAPH
+    const [cancellationData, setCancellationData] = useState({
+        labels: [],
+        datasets: [{
+            label: 'Transactions Cancelled',
+            backgroundColor: ["#765dd9", "#866ee6", "#8f78eb", "#9d88f2", "#a590f5", "#b29ffc", "#bcabff", "#c8baff", "#d4c9ff", "#dad2fc"],
+            borderColor: 'rgba(255,99,132,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+            hoverBorderColor: 'rgba(255,99,132,1)',
+            data: []
+        }]
+      });
+    const input = UserData[0];
+    const cancelInput = CancelData[0];
+
+    const newTransactionData = {
+        labels: [],
+        datasets: [{
+            label: 'Transactions Completed',
+            backgroundColor: ["#765dd9", "#866ee6", "#8f78eb", "#9d88f2", "#a590f5", "#b29ffc", "#bcabff", "#c8baff", "#d4c9ff", "#dad2fc"],
+            borderColor: 'rgba(255,99,132,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+            hoverBorderColor: 'rgba(255,99,132,1)',
+            data: []
+        }]
+      }
+    input.forEach(element => {
+        
+        newTransactionData.labels.push(element[0]);
+        newTransactionData.datasets[0].data.push(element[1]);
+        
+    });
+
+    const newCancellationData = {
+        labels: [],
+        datasets: [{
+            label: 'Transactions Cancelled',
+            backgroundColor: ["#765dd9", "#866ee6", "#8f78eb", "#9d88f2", "#a590f5", "#b29ffc", "#bcabff", "#c8baff", "#d4c9ff", "#dad2fc"],
+            borderColor: 'rgba(255,99,132,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+            hoverBorderColor: 'rgba(255,99,132,1)',
+            data: []
+        }]
+      }
+    cancelInput.forEach(element => {
+        
+        newCancellationData.labels.push(element[0]);
+        newCancellationData.datasets[0].data.push(element[1]);
+        
+    });
+
+    useEffect(() => {
+        getTopTen();
+        getTopTenCancel();
+        
+        
     }, []);
 
     return (
@@ -175,6 +215,7 @@ function Clock() {
             <BarGraph chartData={transactionData} />
             <BarGraph chartData={cancellationData} />
             </div>
+            <button onClick={play}>play</button>
         </div>
         
     );
