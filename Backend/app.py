@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from flask import Flask, jsonify
+from flask import Flask, jsonify, make_response
 from bson.json_util import dumps
 import json
 
@@ -32,6 +32,17 @@ json_data_alpha = dumps(list_cur_alpha, indent = 2)
 json_data_aequitas = dumps(list_cur_aequitas, indent = 2)
 json_data_tsx = dumps(list_cur_tsx, indent = 2)
 
+
+@app.route('/sample')
+def sample():
+    data = {
+        "name": "John Smith",
+        "age": 30,
+        "city": "New York"
+    }
+    res = make_response(dumps(data))
+    res.headers.add("Access-Control-Allow-Origin", "*")
+    return res
 
 @app.route("/api/aequitas_all")
 def aequitas():
