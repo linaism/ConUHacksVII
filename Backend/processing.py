@@ -83,10 +83,6 @@ print(top10)
 top10new = get_top_10_symbols_by_trade_success_per_one_second(
     [TSX_df, Aequitas_df, Alpha_df]
 )
-filepath = "data/top10.json"
-print("toppest")
-print(top10new, filepath)
-
 # print("TSX_df.head():")
 # print(TSX_df.head())
 
