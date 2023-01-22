@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from flask import Flask, jsonify, Response, make_response
 import json
+from bson.json_util import dumps
 import pandas as pd
 import datetime
 
@@ -8,11 +9,6 @@ import datetime
 app = Flask(__name__)
 if __name__ == "__main__":
     app.run()
-
-file_AQD = "data/AequitasData.json"
-file_ALPHD = "data/AlphaData.json"
-file_TSX = "data/TSXData.json"
-filepath = "data/top10.json"
 
 # DB Connection String
 CONNECTION_STRING = (
@@ -36,9 +32,9 @@ list_cur_alpha = cursorAlpha
 list_cur_aequitas = cursorAequitas
 list_cur_tsx = cursorTSX
 
-json_data_alpha = json.dumps(list_cur_alpha, indent=2)
-json_data_aequitas = json.dumps(list_cur_aequitas, indent=2)
-json_data_tsx = json.dumps(list_cur_tsx, indent=2)
+json_data_alpha = dumps(list_cur_alpha, indent=2)
+json_data_aequitas = dumps(list_cur_aequitas, indent=2)
+json_data_tsx = dumps(list_cur_tsx, indent=2)
 
 
 def read_json_file(file_name: str) -> pd.DataFrame:
@@ -175,7 +171,7 @@ def get_top_10_symbols_by_trade_success_per_one_second(data_frames: list) -> dic
 @app.route("/sample")
 def sample():
     data = {"name": "John Smith", "age": 30, "city": "New York"}
-    res = make_response(json.dumps(data))
+    res = make_response(dumps(data))
     res.headers.add("Access-Control-Allow-Origin", "*")
     return res
 
@@ -224,6 +220,7 @@ def getTopTenSuccessSeconds(collection):
         df = read_json_file(json_data_tsx)
     if collection == "alpha":
         df = read_json_file(json_data_alpha)
+        
     top10new = get_top_10_symbols_by_trade_success_per_one_second([df])
     res = make_response(top10new)
     res.headers.add("Access-Control-Allow-Origin", "*")
@@ -241,7 +238,6 @@ def getall(collection):
         df = json_data_tsx
     if(collection == "alpha"):
         df = json_data_alpha
-
     res = make_response(df)
     res.headers.add("Access-Control-Allow-Origin", "*")
     return res

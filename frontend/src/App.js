@@ -35,32 +35,6 @@ function getTopTenOverall(){
   });
 }
 
-// all data from any collection
-function getAllSpecificCollection(collection){
-  axios.get('http://127.0.0.1:5000/api/alldata/$collection', {
-    params: { Collection: collection }
-  })
-  .then(response => {
-    console.log(response.data);
-  })
-  .catch(error => {
-    console.log(error);
-  });
-}
-
-//  route to return top 10 success per second from certain collection
-function getTopTenSuccessCertainCollection(collection){
-  axios.get('http://127.0.0.1:5000/api/TopTenSuccessSeconds/$collection', {
-    params: { Collection: collection }
-  })
-  .then(response => {
-    console.log(response.data);
-  })
-  .catch(error => {
-    console.log(error);
-  });
-}
-
 
 
 function App() {
@@ -76,8 +50,6 @@ function App() {
         <button onClick={test}>Press</button>
         <button onClick={getTopTenOverall}>TopTenOverall</button>
         <button onClick={getTopTen}>TopTen</button>
-        <button onClick={getAllSpecificCollection("tsx")}>AllSpecificCollection</button>
-        <button onClick={getTopTenSuccessCertainCollection("tsx")}>Top Ten Success Certain Collection</button>
 
 
 
