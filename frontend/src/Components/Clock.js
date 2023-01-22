@@ -21,20 +21,6 @@ const getTopTen = async () => {
       console.log(error);
     });
 };
-const getTopTenCancel = async () => {
-  await axios
-    .get("http://127.0.0.1:5000/api/toptensymbolscancelled")
-    .then((response) => {
-      console.log("test");
-      console.log(response.data);
-      //return response.data["symbols by time"];
-      CancelData = response.data["symbols by time"];
-    })
-    .catch((error) => {
-      CancelData = [[]];
-      console.log(error);
-    });
-};
 
 const getTopTenCancelledPerSecond = async () => {
   await axios
