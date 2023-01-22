@@ -33,11 +33,22 @@ const getTopTenCancel = async () => {
       console.log(error);
     });
 };
+const getTotalCancelledOverTime = async () => {
+  axios
+    .get("http://127.0.0.1:5000/api/TotalCancelledOverTime")
+    .then((response) => {
+      console.log(response.data);
+      cancelArr = response.data["Cancelled Over Time"];
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 
 function Statistics({counter, setCounter}) {
   useEffect(() => {
     getTotalTraded();
-    getTopTenCancel();
+    getTotalCancelledOverTime();
   }, []);
   return (
     <div className="stats">
