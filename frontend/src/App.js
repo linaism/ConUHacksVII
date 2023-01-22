@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import BarGraph from './Components/BarGraph';
 import { UserData } from './Data'
+import {Clock} from './Components/Clock';
 
 import axios from 'axios';
 
@@ -27,6 +28,7 @@ function App() {
 
   return (
     <div className="App">
+      <Clock/>
       <div style={{width: 1000}}>
         <BarGraph chartData={userData} />
       </div>
