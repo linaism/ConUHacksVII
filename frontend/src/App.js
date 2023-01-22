@@ -61,8 +61,6 @@ function App() {
       <div className="anomalies">
 
       </div>
-        <button onClick={getTopTenOverall}>TopTenOverall</button>
-        <button onClick={getTopTen}>TopTen</button>
 
 
     </div>
