@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import './App.css';
 import BarGraph from './Components/BarGraph';
@@ -16,6 +17,30 @@ function test(){
   });
 }
 
+// route to return top 10 success per second from all collections
+function getTopTen(){
+  axios.get('http://127.0.0.1:5000/api/top10')
+  .then(response => {
+    console.log(response.data);
+  })
+  .catch(error => {
+    console.log(error);
+  });
+}
+
+// route to return top 10 success overall
+function getTopTenOverall(){
+  axios.get('http://127.0.0.1:5000/api/top10All')
+  .then(response => {
+    console.log(response.data);
+  })
+  .catch(error => {
+    console.log(error);
+  });
+}
+
+
+
 function App() {
   const [userData, setUserData] = useState({
     labels: UserData.map((data) => data.year),
@@ -28,6 +53,12 @@ function App() {
 
   return (
     <div className="App">
+      <header className="App-header">
+
+        <button onClick={test}>Press</button>
+        <button onClick={getTopTenOverall}>TopTenOverall</button>
+        <button onClick={getTopTen}>TopTen</button>
+
       <Clock/>
       <div style={{width: 1000}}>
         <BarGraph chartData={userData} />
