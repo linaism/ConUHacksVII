@@ -7,6 +7,7 @@ import { Clock } from "./Components/Clock";
 import axios from "axios";
 import Header from "./Components/Header";
 import Statistics from "./Components/Statistics";
+import Anomalies from "./Components/Anomalies";
 
 function test() {
   axios
@@ -73,7 +74,7 @@ function App() {
         </div>
       </div>
       <div className="anomalies">
-
+        <Anomalies />
       </div>
     </div>
   );

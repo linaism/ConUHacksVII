@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import BarGraph from "./BarGraph";
-//import { UserData } from '../Data'
 import axios from "axios";
 import "./Clock.css";
+import playLogo from '../Assets/play-button.png'
 
 let UserData = [[]];
 let CancelData = [[]];
@@ -85,10 +85,7 @@ function Clock({counter, setCounter}) {
                 "#d4c9ff",
                 "#dad2fc",
               ],
-              borderColor: "rgba(255,99,132,1)",
               borderWidth: 1,
-              hoverBackgroundColor: "rgba(255,99,132,0.4)",
-              hoverBorderColor: "rgba(255,99,132,1)",
               data: [],
             },
           ],
@@ -116,10 +113,7 @@ function Clock({counter, setCounter}) {
                 "#d4c9ff",
                 "#dad2fc",
               ],
-              borderColor: "rgba(255,99,132,1)",
               borderWidth: 1,
-              hoverBackgroundColor: "rgba(255,99,132,0.4)",
-              hoverBorderColor: "rgba(255,99,132,1)",
               data: [],
             },
           ],
@@ -158,10 +152,7 @@ function Clock({counter, setCounter}) {
           "#d4c9ff",
           "#dad2fc",
         ],
-        borderColor: "rgba(255,99,132,1)",
         borderWidth: 1,
-        hoverBackgroundColor: "rgba(255,99,132,0.4)",
-        hoverBorderColor: "rgba(255,99,132,1)",
         data: [],
       },
     ],
@@ -185,10 +176,7 @@ function Clock({counter, setCounter}) {
           "#d4c9ff",
           "#dad2fc",
         ],
-        borderColor: "rgba(255,99,132,1)",
         borderWidth: 1,
-        hoverBackgroundColor: "rgba(255,99,132,0.4)",
-        hoverBorderColor: "rgba(255,99,132,1)",
         data: [],
       },
     ],
@@ -212,10 +200,7 @@ function Clock({counter, setCounter}) {
           "#d4c9ff",
           "#dad2fc",
         ],
-        borderColor: "rgba(255,99,132,1)",
         borderWidth: 1,
-        hoverBackgroundColor: "rgba(255,99,132,0.4)",
-        hoverBorderColor: "rgba(255,99,132,1)",
         data: [],
       },
     ],
@@ -242,10 +227,7 @@ function Clock({counter, setCounter}) {
           "#d4c9ff",
           "#dad2fc",
         ],
-        borderColor: "rgba(255,99,132,1)",
         borderWidth: 1,
-        hoverBackgroundColor: "rgba(255,99,132,0.4)",
-        hoverBorderColor: "rgba(255,99,132,1)",
         data: [],
       },
     ],
@@ -260,31 +242,36 @@ function Clock({counter, setCounter}) {
     getTopTenCancelledPerSecond();
   }, []);
 
-  return (
-    <div className="parent">
-      <div className="col">
-        <div className="row">
-          <div className="clockDate"> 06/01/2023</div>
-          <div className="clockTime">{time}</div>
+    return (
+        <div className='parent'>
+            <div className='col'>
+                <div className='playB row'>
+                    <img className="buttonClass" onClick={play} src={playLogo} alt="Play" />
+                </div>
+                <div className="combo row">
+                    <div className='info row'>
+                        <div className="clockDate"> 06/01/2023</div>
+                        <div className="clockTime">{time}</div>
+                    </div>
+                    <div className='row'>
+                        <div className="marketTitle"> Market Status </div>
+                        <div className="marketStatus"> 
+                        {counter < 120 ? (
+                            <div className='marketClosed'> Closed </div>
+                        ) : (
+                            <div className='marketOpen'> Open </div>
+                        )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className='graphz'>
+                <div className='TRProcessedTitle'>Transactions Processed</div>
+                <BarGraph chartData={transactionData} />
+                <div className='TRCancelledTitle'>Transactions Cancelled</div>
+                <BarGraph chartData={cancellationData} />
+            </div>
         </div>
-        <div className="row">
-          <div className="marketTitle"> Market Status </div>
-
-          <div className="marketStatus">
-            {counter < 120 ? (
-              <div className="marketClosed"> Closed </div>
-            ) : (
-              <div className="marketOpen"> Open </div>
-            )}
-          </div>
-        </div>
-      </div>
-      <div className="graphz">
-        <BarGraph chartData={transactionData} />
-        <BarGraph chartData={cancellationData} />
-      </div>
-      <button className="buttonClass" onClick={play}>play</button>
-    </div>
   );
 }
 export { Clock };

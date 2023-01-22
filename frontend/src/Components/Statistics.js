@@ -53,10 +53,10 @@ function Statistics({counter, setCounter}) {
   return (
     <div className="stats">
         <div className='statsTitle'>STATISTICS</div>
-        <div className='statsTitle'>Total Processed Trades</div>
-        <div className='statsTitle'>{totalArr[counter]}</div>
-        <div className='statsTitle'>Total Cancelled Trades</div>
-        <div className='statsTitle'>{cancelArr[counter]}</div>
+        <div className='statsSubTitle'>Total Processed Trades</div>
+        <div className='statsCount'>{totalArr[counter]}</div>
+        <div className='statsSubTitle'>Total Cancelled Trades</div>
+        <div className='statsCount'>{cancelArr[counter]}</div>
         {console.log(cancelArr)}
         
     </div>
