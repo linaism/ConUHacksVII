@@ -1,7 +1,8 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
-import ReactSlider from 'react-slider'
-import Slider from './slider';
+import BarGraph from './Components/BarGraph';
+import { UserData } from './Data'
+
 import axios from 'axios';
 
 function test(){
@@ -15,18 +16,20 @@ function test(){
 }
 
 function App() {
+  const [userData, setUserData] = useState({
+    labels: UserData.map((data) => data.year),
+    datasets: [{
+      label: "Users Gained",
+      data: UserData.map((data) => data.gain), 
+      backgroundColor: ["#765dd9", "#866ee6", "#8f78eb", "#9d88f2", "#a590f5", "#b29ffc", "#bcabff", "#c8baff", "#d4c9ff", "#dad2fc"]
+    }]
+  })
 
-  //const [count, setCount] = useState(0);
   return (
     <div className="App">
-      <header className="App-header">
-        
-        <Slider 
-
-        />
-        <button onClick={test}>Press</button>
-
-      </header>
+      <div style={{width: 1000}}>
+        <BarGraph chartData={userData} />
+      </div>
     </div>
   );
 }
