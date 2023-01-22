@@ -20,6 +20,17 @@ function test() {
 }
 
 // route to return top 10 success per second from all collections
+function getTotalCancelledOverTime() {
+  axios
+    .get("http://127.0.0.1:5000/api/TotalCancelledOverTime")
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 function getTopTen() {
   axios
     .get("http://127.0.0.1:5000/api/top10")
@@ -64,10 +75,6 @@ function App() {
       <div className="anomalies">
 
       </div>
-        <button onClick={getTopTenOverall}>TopTenOverall</button>
-        <button onClick={getTopTen}>TopTen</button>
-
-
     </div>
   );
 }

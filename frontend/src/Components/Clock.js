@@ -283,7 +283,7 @@ function Clock({counter, setCounter}) {
         <BarGraph chartData={transactionData} />
         <BarGraph chartData={cancellationData} />
       </div>
-      <button onClick={play}>play</button>
+      <button className="buttonClass" onClick={play}>play</button>
     </div>
   );
 }
