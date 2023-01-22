@@ -51,7 +51,20 @@ def get_top_10_symbols_by_trade_success(data_frames: list) -> list:
     return top10[:10]
 
 
-def get_top_10_symbols_by_trade_success_per_one_second(data_frames: list) -> list:
+def get_top_10_symbols_by_cancelled(data_frames: list) -> list:
+    top10 = []
+    for df in data_frames:
+        filtered_df = df.query("MessageType == 'Cancelled'")
+        counts = filtered_df["Symbol"].value_counts()
+        for symbol, count in counts.items():
+            top10.append((symbol, count))
+    top10 = sorted(top10, key=lambda x: x[1], reverse=True)
+    return top10[:10]
+
+
+# use this function get_top_10_symbols_by_cancelled to get the top 10 symbols by cancelled Message type per second
+def get_top_10_symbols_by_cancelled_per_second(data_frames: list) -> list:
+    # returns a list that contains a sublist of tuples (symbol, count) where each sublist is a second in the timestamp
     top10 = []
     for df in data_frames:
         df["TimeStamps"] = pd.to_datetime(df["TimeStamp"])
@@ -59,30 +72,52 @@ def get_top_10_symbols_by_trade_success_per_one_second(data_frames: list) -> lis
         end_time = df["TimeStamps"].max()
         current_time = start_time
         while current_time < end_time:
-            next = current_time + datetime.timedelta(seconds=1)
-            filtered_df = df.query("TimeStamps >= @current_time and TimeStamps < @next")
-            count = filtered_df["Symbol"].value_counts()
-            symbols_count = []
-            for symbol, count in count.items():
-                symbols_count.append((symbol, count))
-            symbols_count = sorted(symbols_count, key=lambda x: x[1], reverse=True)[:10]
+            next_time = current_time + datetime.timedelta(seconds=1)
+            filtered_df = df.query(
+                "MessageType == 'Cancelled' and TimeStamp >= @current_time and TimeStamp < @next_time"
+            )
+            counts = filtered_df["Symbol"].value_counts()
+            symbol_count = []
+            for symbol, count in counts.items():
+                symbol_count.append((symbol, count))
+            symbols_count = sorted(symbol_count, key=lambda x: x[1], reverse=True)[:10]
             top10.append(symbols_count)
-            current_time = next
-    symbol_dict = {"symbols by time": top10}
-    # sort by count
-    # top10 = sorted(top10, key=lambda x: x[1], reverse=True)
-    return symbol_dict
+            current_time = next_time
+    return top10
+
+
+def get_top_10_symbols_by_trade_per_second(data_frames: list) -> list:
+    # returns a list that contains a sublist of tuples (symbol, count) where each sublist is a second in the timestamp
+    top10 = []
+    for df in data_frames:
+        df["TimeStamps"] = pd.to_datetime(df["TimeStamp"])
+        start_time = df["TimeStamps"].min()
+        end_time = df["TimeStamps"].max()
+        current_time = start_time
+        while current_time < end_time:
+            next_time = current_time + datetime.timedelta(seconds=1)
+            filtered_df = df.query(
+                "MessageType == 'Trade' and TimeStamp >= @current_time and TimeStamp < @next_time"
+            )
+            counts = filtered_df["Symbol"].value_counts()
+            symbol_count = []
+            for symbol, count in counts.items():
+                symbol_count.append((symbol, count))
+            symbols_count = sorted(symbol_count, key=lambda x: x[1], reverse=True)[:10]
+            top10.append(symbols_count)
+            current_time = next_time
+    return top10
 
 
 TSX_df = read_json_file(file_TSX)
 Aequitas_df = read_json_file(file_AQD)
 Alpha_df = read_json_file(file_ALPHD)
-top10 = get_top_10_symbols_by_trade_success([TSX_df, Aequitas_df, Alpha_df])
+top10 = get_top_10_symbols_by_cancelled_per_second([Aequitas_df])
 print(top10)
 
-top10new = get_top_10_symbols_by_trade_success_per_one_second(
-    [TSX_df, Aequitas_df, Alpha_df]
-)
+# top10new = get_top_10_symbols_by_trade_success_per_one_second(
+#     [TSX_df, Aequitas_df, Alpha_df]
+# )
 # print("TSX_df.head():")
 # print(TSX_df.head())
 
